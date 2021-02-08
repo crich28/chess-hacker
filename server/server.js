@@ -16,7 +16,7 @@ app.get("*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log(`Client ${socket.id} connected`);
 
 });
 
