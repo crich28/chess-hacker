@@ -1,23 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import Chess from "chess.js";
 
 const startingBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const URL = "http://localhost:5000";
 
 export default function ChessGame() {
+
+  const socketRef = useRef();
 
   const [chess] = useState(new Chess(startingBoard));
 
   const [fen, setFen] = useState(chess.fen());
 
-  const handleMove = (move) => {
-    const legalMove = chess.move({
-      from: move.sourceSquare,
-      to: move.targetSquare,
-      promotion: "q"
+  useEffect(() => {
+    socketRef.current = socketIOClient(URL);
+
+    socketRef.current.on("update-board", move => {
+      chess.move(move);
+      setFen(chess.fen());
     });
 
-    if (legalMove) setFen(chess.fen());
+    return () => {
+      socketRef.current.disconnect();
+    }
+  }, []);
+
+  const handleMove = (e) => {
+    const move = {
+      from: e.sourceSquare,
+      to: e.targetSquare,
+      promotion: "q"
+    }
+
+    const legalMove = chess.move(move);
+
+    if (legalMove) {
+      socketRef.current.emit("make-move", move);
+      setFen(chess.fen());
+    }
   }
 
   return (

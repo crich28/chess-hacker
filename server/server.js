@@ -18,6 +18,9 @@ app.get("*", (req, res) => {
 io.on("connection", (socket) => {
   console.log(`Client ${socket.id} connected`);
 
+  socket.on("make-move", (move) => {
+    io.emit("update-board", move);
+  })
 });
 
 module.exports = server;
