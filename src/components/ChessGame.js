@@ -1,3 +1,4 @@
+import "../styles/ChessGame.css";
 import { useState, useEffect, useRef } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
@@ -55,14 +56,30 @@ export default function ChessGame(props) {
     }
   };
 
+  const turnMsg = () => {
+    if (chess.game_over()) {
+      return <div>Game Over!</div>;
+    }
+
+    if (chess.turn() === "b") {
+      return <div>Black's Turn</div>;
+    }
+
+    if (chess.turn() === "w") {
+      return <div>White's Turn</div>;
+    }
+  };
+
   return (
-    <div>
+    <section className="chess-game">
+      <h3>Room ID: {id}</h3>
       <Chessboard
         width={400}
         position={fen}
         onDrop={handleMove}
         orientation={color ? color : "white"}
       />
-    </div>
+      {turnMsg()}
+    </section>
   );
 }
