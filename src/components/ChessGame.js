@@ -7,7 +7,9 @@ const startingBoard =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const URL = process.env.REACT_APP_URL;
 
-export default function ChessGame({ id }) {
+export default function ChessGame(props) {
+  const { id } = props.match.params;
+  
   const socketRef = useRef();
 
   const [chess] = useState(new Chess(startingBoard));
