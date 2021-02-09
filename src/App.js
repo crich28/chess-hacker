@@ -4,7 +4,7 @@ import ChessGame from "./components/ChessGame";
 function App() {
   return (
     <div className="App">
-      <ChessGame />
+      <ChessGame id="a" />
     </div>
   );
 }

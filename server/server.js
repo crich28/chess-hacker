@@ -18,9 +18,17 @@ app.get("*", (req, res) => {
 io.on("connection", (socket) => {
   console.log(`Client ${socket.id} connected`);
 
+  const { roomID } = socket.handshake.query;
+  socket.join(roomID);
+
   socket.on("make-move", (move) => {
-    io.emit("update-board", move);
-  })
+    io.in(roomID).emit("update-board", move);
+  });
+
+  socket.on("disconnect", () => {
+    socket.leave(roomID);
+    console.log(`Client ${socket.id} disconnected`);
+  });
 });
 
 module.exports = server;
