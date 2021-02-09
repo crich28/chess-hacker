@@ -6,17 +6,32 @@ class ActiveRooms {
     this.rooms = {}
   }
 
-  joinRoom(id) {
+  joinRoom(id, socketID) {
+    let color = null;
+
     if (id in this.rooms) {
-      this.rooms[id].count++;
+      const room = this.rooms[id];
+      room.count++;
+      if (!room.players.b) {
+        room.players.b = socketID;
+        color = "black";
+      }
     } else {
       this.rooms[id] = {
         count: 1,
+        players: {
+          w: socketID,
+          b: null
+        },
         game: new Chess()
       }
+      color = "white";
     }
 
-    return this.rooms[id].game.fen();
+    return {
+      fen: this.rooms[id].game.fen(),
+      color
+    }
   }
 
   makeMove(id, move) {

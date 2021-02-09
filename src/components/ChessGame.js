@@ -15,16 +15,18 @@ export default function ChessGame(props) {
   const [chess] = useState(new Chess(startingBoard));
 
   const [fen, setFen] = useState(chess.fen());
+  const [color, setColor] = useState(null);
 
   useEffect(() => {
     socketRef.current = socketIOClient(URL, {
-      query: { roomID: id }
+      query: { roomID: id },
     });
 
-    socketRef.current.on("get-fen", (fen) => {
+    socketRef.current.on("get-settings", ({ fen, color }) => {
       chess.load(fen);
       setFen(chess.fen());
-    })
+      setColor(color);
+    });
 
     socketRef.current.on("update-board", (move) => {
       chess.move(move);
@@ -37,6 +39,8 @@ export default function ChessGame(props) {
   }, [id]);
 
   const handleMove = (e) => {
+    if (!color || chess.turn() !== color.charAt(0)) return;
+
     const move = {
       from: e.sourceSquare,
       to: e.targetSquare,
@@ -53,7 +57,12 @@ export default function ChessGame(props) {
 
   return (
     <div>
-      <Chessboard width={400} position={fen} onDrop={handleMove} />
+      <Chessboard
+        width={400}
+        position={fen}
+        onDrop={handleMove}
+        orientation={color ? color : "white"}
+      />
     </div>
   );
 }

@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
   const { roomID } = socket.handshake.query;
 
   socket.join(roomID);
-  io.to(socket.id).emit("get-fen", rooms.joinRoom(roomID));
+  io.to(socket.id).emit("get-settings", rooms.joinRoom(roomID, socket.id));
 
   socket.on("make-move", (move) => {
     io.in(roomID).emit("update-board", rooms.makeMove(roomID, move));
