@@ -9,7 +9,7 @@ const URL = process.env.REACT_APP_URL;
 
 export default function ChessGame(props) {
   const { id } = props.match.params;
-  
+
   const socketRef = useRef();
 
   const [chess] = useState(new Chess(startingBoard));
@@ -20,6 +20,11 @@ export default function ChessGame(props) {
     socketRef.current = socketIOClient(URL, {
       query: { roomID: id }
     });
+
+    socketRef.current.on("get-fen", (fen) => {
+      chess.load(fen);
+      setFen(chess.fen());
+    })
 
     socketRef.current.on("update-board", (move) => {
       chess.move(move);
