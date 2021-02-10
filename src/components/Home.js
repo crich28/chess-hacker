@@ -41,7 +41,15 @@ export default function Home() {
           <Link to={`/${id}`}>Join Game</Link>
         </Button>
       </div>
-      <Chessboard width={400} position={startingBoard} />
+      <Chessboard
+        width={400}
+        position={startingBoard}
+        boardStyle={{
+          border: "2px solid black",
+          borderRadius: "5px",
+          boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+        }}
+      />
     </section>
   );
 }

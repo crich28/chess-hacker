@@ -38,12 +38,12 @@ export default function ChessGame(props) {
     });
 
     socketRef.current.on("reset-game", () => {
-      setColor(color => {
+      setColor((color) => {
         if (color === "white") return "black";
         if (color === "black") return "white";
         return null;
       });
-      
+
       chess.reset();
       setFen(chess.fen());
       setPlayingAgain(false);
@@ -88,14 +88,14 @@ export default function ChessGame(props) {
             <div className="after-game-options">
               <FindGameBtn />
               <div>
-              <Button
-                onClick={playAgain}
-                disabled={playingAgain}
-                variant="contained"
-                color="primary"
-              >
-                {!playingAgain ? "Play Again" : "Waiting..."}
-              </Button>
+                <Button
+                  onClick={playAgain}
+                  disabled={playingAgain}
+                  variant="contained"
+                  color="primary"
+                >
+                  {!playingAgain ? "Play Again" : "Waiting..."}
+                </Button>
               </div>
             </div>
           )}
@@ -120,6 +120,11 @@ export default function ChessGame(props) {
         position={fen}
         onDrop={handleMove}
         orientation={color ? color : "white"}
+        boardStyle={{
+          border: "2px solid black",
+          borderRadius: "5px",
+          boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+        }}
       />
       {turnMsg()}
     </section>
