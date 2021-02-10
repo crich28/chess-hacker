@@ -10,6 +10,6 @@ a {
   align-items: center;
 }
 
-.start-game, .join-game {
+.start-game, .join-game, .find-game {
   margin-bottom: 16px;
 }

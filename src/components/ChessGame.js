@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import Chess from "chess.js";
+import FindGameBtn from "./FindGameBtn";
 
 const startingBoard =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -58,7 +59,12 @@ export default function ChessGame(props) {
 
   const turnMsg = () => {
     if (chess.game_over()) {
-      return <div>Game Over!</div>;
+      return (
+        <div>
+          <p>Game Over!</p>
+          <FindGameBtn />
+        </div>
+      );
     }
 
     if (chess.turn() === "b") {

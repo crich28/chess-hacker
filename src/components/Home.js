@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
 import Chessboard from "chessboardjsx";
+import FindGameBtn from "./FindGameBtn";
 
 function makeID(len) {
   let result = "";
@@ -23,6 +24,7 @@ export default function Home() {
   return (
     <section className="home">
       <h1>Play Chess</h1>
+      <FindGameBtn />
       <div className="start-game">
         <Button variant="contained" color="primary">
           <Link to={`/${makeID(8)}`}>Start New Game</Link>
