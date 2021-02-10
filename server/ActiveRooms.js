@@ -23,6 +23,10 @@ class ActiveRooms {
           w: socketID,
           b: null
         },
+        playingAgain: {
+          w: false,
+          b: false
+        },
         game: new Chess()
       }
       color = "white";
@@ -37,6 +41,27 @@ class ActiveRooms {
   makeMove(id, move) {
     this.rooms[id].game.move(move);
     return move;
+  }
+
+  playAgain(id, color) {
+    const room = this.rooms[id];
+    room.playingAgain[color] = true;
+    if (room.playingAgain.w && room.playingAgain.b) {
+      room.players = {
+        w: room.players.b,
+        b: room.players.w
+      };
+      
+      room.playingAgain = {
+        w: false,
+        b: false
+      }
+      
+      room.game.reset();
+      return true;
+    }
+
+    return false;
   }
 
   leaveRoom(id) {

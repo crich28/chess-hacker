@@ -5,3 +5,9 @@
   align-items: center;
   text-align: center;
 }
+
+.after-game-options {
+  display: flex;
+  width: 300px;
+  justify-content: space-evenly;
+}

@@ -1,5 +1,6 @@
 import "../styles/ChessGame.css";
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@material-ui/core";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import Chess from "chess.js";
@@ -18,6 +19,7 @@ export default function ChessGame(props) {
 
   const [fen, setFen] = useState(chess.fen());
   const [color, setColor] = useState(null);
+  const [playingAgain, setPlayingAgain] = useState(false);
 
   useEffect(() => {
     socketRef.current = socketIOClient(URL, {
@@ -33,6 +35,21 @@ export default function ChessGame(props) {
     socketRef.current.on("update-board", (move) => {
       chess.move(move);
       setFen(chess.fen());
+    });
+
+    socketRef.current.on("reset-game", () => {
+      chess.reset();
+      setFen(chess.fen());
+      setPlayingAgain(false);
+
+      if (color === "white") {
+        setColor("black");
+        return;
+      }
+
+      if (color === "black") {
+        setColor("white");
+      }
     });
 
     return () => {
@@ -57,12 +74,34 @@ export default function ChessGame(props) {
     }
   };
 
+  const playAgain = () => {
+    socketRef.current.emit("play-again", {
+      id,
+      color: color.charAt(0),
+    });
+    setPlayingAgain(true);
+  };
+
   const turnMsg = () => {
     if (chess.game_over()) {
       return (
         <div>
           <p>Game Over!</p>
-          <FindGameBtn />
+          {color && (
+            <div className="after-game-options">
+              <FindGameBtn />
+              <div>
+              <Button
+                onClick={playAgain}
+                disabled={playingAgain}
+                variant="contained"
+                color="primary"
+              >
+                {!playingAgain ? "Play Again" : "Waiting..."}
+              </Button>
+              </div>
+            </div>
+          )}
         </div>
       );
     }

@@ -42,6 +42,11 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("play-again", ({ id, color }) => {
+    const playersReady = rooms.playAgain(id, color);
+    if (playersReady) io.in(roomID).emit("reset-game");
+  });
+
   socket.on("make-move", (move) => {
     io.in(roomID).emit("update-board", rooms.makeMove(roomID, move));
   });
