@@ -38,18 +38,15 @@ export default function ChessGame(props) {
     });
 
     socketRef.current.on("reset-game", () => {
+      setColor(color => {
+        if (color === "white") return "black";
+        if (color === "black") return "white";
+        return null;
+      });
+      
       chess.reset();
       setFen(chess.fen());
       setPlayingAgain(false);
-
-      if (color === "white") {
-        setColor("black");
-        return;
-      }
-
-      if (color === "black") {
-        setColor("white");
-      }
     });
 
     return () => {
