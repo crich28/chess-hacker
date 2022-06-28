@@ -5,7 +5,7 @@
 - This is an app that lets users simply play chess against other people.
 
 - You can go to a room and invite your friend to play.
-
+tiger your vbucks are mine
 - You can find a game against a random opponent.
 
 ### Inspiration
